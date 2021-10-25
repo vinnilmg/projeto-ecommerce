@@ -4,6 +4,10 @@ from django.conf import settings
 from PIL import Image
 
 
+def formata_preco(val):
+    return f'R$ {val:.2f}'.replace('.', ',')
+
+
 def resize_image(img, new_width=800):
     img_full_path = os.path.join(settings.MEDIA_ROOT, img.name)
     img_pil = Image.open(img_full_path)
