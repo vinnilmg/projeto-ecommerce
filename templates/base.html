@@ -8,6 +8,10 @@
   <body>
     {% include 'parciais/_nav.html' %}
 
+    <div class="container">
+      {% include 'parciais/_messages.html' %}
+    </div>
+
     <main class="container mt-4 mb-4">{% block conteudo %}{% endblock %}</main>
 
     {% include 'parciais/_footer.html' %}

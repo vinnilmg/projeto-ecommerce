@@ -1690,7 +1690,7 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #17a2b8;
+  background-color: #000;
   border-color: #17a2b8; }
   .btn-primary:hover {
     color: #fff;
@@ -3383,7 +3383,7 @@ input[type="button"].btn-block {
   padding: 0.5rem 0.75rem;
   margin-left: -1px;
   line-height: 1.25;
-  color: #17a2b8;
+  color: #145;
   background-color: #fff;
   border: 1px solid #dee2e6; }
   .page-link:hover {
@@ -3409,8 +3409,8 @@ input[type="button"].btn-block {
 .page-item.active .page-link {
   z-index: 1;
   color: #fff;
-  background-color: #17a2b8;
-  border-color: #17a2b8; }
+  background-color: #000;
+  border-color: #000; }
 
 .page-item.disabled .page-link {
   color: #6c757d;
@@ -4548,7 +4548,7 @@ a.close.disabled {
   vertical-align: text-top !important; }
 
 .bg-primary {
-  background-color: #17a2b8 !important; }
+  background-color: #000 !important; }
 
 a.bg-primary:hover, a.bg-primary:focus,
 button.bg-primary:hover,
