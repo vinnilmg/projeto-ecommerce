@@ -67,3 +67,17 @@ def valida_cpf(cpf):
         return True
     else:
         return False
+
+
+def qtd_total_carrinho(carrinho):
+    return sum([item['quantidade'] for item in carrinho.values()])
+
+
+def total_carrinho(carrinho):
+    return sum(
+        [
+            item.get('preco_quantitativo_promocional') if item.get(
+                'preco_quantitativo_promocional') else item.get('preco_quantitativo')
+            for item in carrinho.values()
+        ]
+    )
