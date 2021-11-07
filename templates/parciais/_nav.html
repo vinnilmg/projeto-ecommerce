@@ -17,7 +17,13 @@
     <ul class="navbar-nav ml-auto">
 
       <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
+        <a class="nav-link" href="{% url 'perfil:criar' %}">
+        {% if request.user.is_authenticated %}
+          Meu perfil
+        {% else %}
+          Cadastre-se
+        {% endif %}
+        </a>
       </li>
       <li class="nav-item dropdown">
         <a
