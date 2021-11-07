@@ -3,6 +3,7 @@ from django.views.generic import ListView
 from django.views import View
 from django.contrib.auth.models import User
 import copy
+from django.contrib.auth import authenticate, login
 from . import models
 from . import forms
 
@@ -25,11 +26,11 @@ class BasePerfil(View):
                 'userform': forms.UserForm(
                     data=self.request.POST or None,
                     usuario=self.request.user,
-                    instance=self.request.user
+                    instance=self.request.user  # envia instancia pro formulario
                 ),
                 'perfilform': forms.PerfilForm(
                     data=self.request.POST or None,
-                    # perfil=self.perfil
+                    instance=self.perfil  # envia instancia pro formulario
                 )
             }
         else:
@@ -40,6 +41,10 @@ class BasePerfil(View):
 
         self.user_form = self.contexto['userform']
         self.perfil_form = self.contexto['perfilform']
+
+        # caso o usuário esteja logado, manda pra pagina de atualizar
+        if self.request.user.is_authenticated:
+            self.template_name = 'perfil/atualizar.html'
 
         self.renderizar = render(
             self.request, self.template_name, self.contexto)
@@ -59,6 +64,7 @@ class Criar(BasePerfil):
         first_name = self.user_form.cleaned_data.get('first_name')
         last_name = self.user_form.cleaned_data.get('last_name')
 
+        # Usuario logado -> Atualiza
         if self.request.user.is_authenticated:
             usuario = get_object_or_404(
                 User, username=self.request.user.username)
@@ -72,7 +78,19 @@ class Criar(BasePerfil):
                 usuario.set_password(password)
 
             usuario.save()
+
+            # se o usuário estar cadastrado mas nao tiver perfil
+            if not self.perfil:
+                self.perfil_form.cleaned_data['usuario'] = usuario
+                perfil = models.Perfil(**self.perfil_form.cleaned_data)
+            else:
+                perfil = self.perfil_form.save(commit=False)
+                perfil.usuario = usuario
+
+            perfil.save()
+
         else:
+            # Usuario novo -> Criar
             usuario = self.user_form.save(commit=False)
             usuario.set_password(password)  # criptografa senha
             usuario.save()
@@ -80,6 +98,17 @@ class Criar(BasePerfil):
             perfil = self.perfil_form.save(commit=False)
             perfil.usuario = usuario
             perfil.save()
+
+        if password:
+            # verifica se usuario e senha autentica
+            autentica = authenticate(
+                self.request,
+                username=usuario,
+                password=password,
+            )
+            # loga o usuario
+            if autentica:
+                login(self.request, user=usuario)
 
         self.request.session['carrinho'] = self.carrinho
         self.request.session.save()
