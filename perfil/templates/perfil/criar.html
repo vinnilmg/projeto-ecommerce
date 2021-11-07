@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
+{% block titulo %} | Perfil {% endblock %}
+
 {% block conteudo %}
 
     <div class="row">
@@ -13,6 +15,7 @@
             <form method="POST" action="">
                 {% csrf_token %}
                 {{ userform|crispy }}
+                {{ perfilform|crispy }}
 
                 <div class="row">
                     <div class="col">
