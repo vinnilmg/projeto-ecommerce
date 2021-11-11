@@ -57,6 +57,8 @@ class BasePerfil(View):
 class Criar(BasePerfil):
     def post(self, *args, **kwargs):
         if not self.user_form.is_valid() or not self.perfil_form.is_valid():
+            messages.error(
+                self.request, 'Existem erros no formulário enviado, por favor verifique os campos.')
             return self.renderizar
 
         username = self.user_form.cleaned_data.get('username')
@@ -118,7 +120,7 @@ class Criar(BasePerfil):
         self.request.session.save()
 
         messages.success(self.request, msg_retorno)
-        return redirect('perfil:criar')
+        return redirect('perfil:carrinho')
 
 
 class Login(View):
