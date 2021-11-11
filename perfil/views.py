@@ -103,6 +103,8 @@ class Criar(BasePerfil):
             perfil.usuario = usuario
             perfil.save()
 
+            msg_retorno = 'Cadastro criado com sucesso. Você já está logado e pode concluir sua compra.'
+
         if password:
             # verifica se usuario e senha autentica
             autentica = authenticate(
@@ -114,13 +116,11 @@ class Criar(BasePerfil):
             if autentica:
                 login(self.request, user=usuario)
 
-            msg_retorno = 'Cadastro criado com sucesso. Você já está logado e pode concluir sua compra.'
-
         self.request.session['carrinho'] = self.carrinho
         self.request.session.save()
 
         messages.success(self.request, msg_retorno)
-        return redirect('perfil:carrinho')
+        return redirect('produto:carrinho')
 
 
 class Login(View):

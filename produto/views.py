@@ -1,3 +1,4 @@
+from perfil.models import Perfil
 from django.shortcuts import render, redirect, reverse, get_object_or_404, HttpResponse
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
@@ -146,6 +147,16 @@ class ResumoDaCompra(View):
     def get(self, *args, **kwargs):
         if not self.request.user.is_authenticated:
             return redirect('perfil:criar')
+
+        perfil = Perfil.objects.filter(usuario=self.request.user).exists()
+
+        if not perfil:
+            messages.error(self.request, 'Usuário não tem perfil cadastrado.')
+            return redirect('perfil:criar')
+
+        if not self.request.session.get('carrinho'):
+            messages.error(self.request, 'Seu carrinho está vazio')
+            return redirect('produto:lista')
 
         contexto = {
             'usuario': self.request.user,
