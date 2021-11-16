@@ -57,6 +57,17 @@ class Perfil(models.Model):
     def clean(self):
         error_messages = {}
 
+        cpf_enviado = self.cpf or None
+        cpf_salvo = None
+        perfil = Perfil.objects.filter(cpf=cpf_enviado).first()
+
+        if perfil:
+            cpf_salvo = perfil.cpf
+
+            # se o cpf existir e for de outro perfil -> ERRO
+            if cpf_salvo is not None and self.pk != perfil.pk:
+                error_messages['cpf'] = 'CPF já cadastrado.'
+
         if self.idade < 18:
             error_messages['idade'] = 'Você deve ser maior de idade'
 
